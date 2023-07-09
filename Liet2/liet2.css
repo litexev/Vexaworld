@@ -1,0 +1,117 @@
+/* Body styling */
+html, body{
+    padding: 0;
+    margin: 0;
+    min-width: 100%;
+    height: 100%;
+    font-family: "Arial";
+}
+
+/* Main box layout */
+.h-box, .v-box, .center { display: flex; }
+.h-box { flex-direction: row; }
+.v-box { flex-direction: column; }
+
+/* Center */
+.center { justify-content: center; align-items: center; }
+.v-center { justify-content: center; }
+.h-center { align-items: center; }
+
+/* Stretch */
+.stretch { flex: 1; }
+.v-stretch { min-height: 100%; }
+.h-stretch { min-width: 100%; }
+
+/* Tools */
+.spread { justify-content: space-between; }
+.wrap { flex-wrap: wrap; }
+
+/* Gaps */
+.gap-1 { gap: 3px; }
+.gap-2 { gap: 5px; }
+.gap-3 { gap: 7px; }
+.gap-4 { gap: 9px; }
+
+/* Text */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* Borders */
+.border, .border-top, .border-left, .border-right, .border-bottom, .border-lr, .border-tb {
+    box-sizing: border-box;
+}
+.border { border: 1px solid gray; }
+.border-top { border-top: 1px solid gray; }
+.border-left { border-left: 1px solid gray; }
+.border-right { border-right: 1px solid gray; }
+.border-bottom { border-bottom: 1px solid gray; }
+.border-lr { border-left: 1px solid gray; border-right: 1px solid gray; }
+.border-tb { border-top: 1px solid gray; border-bottom: 1px solid gray; }
+
+/* Background */
+.bg-body { background-color: white; }
+.bg-0 { background-color: white; }
+.bg-1 { background-color: rgb(218, 218, 218); }
+.bg-2 { background-color: rgb(189, 189, 189); }
+.bg-3 { background-color: rgb(155, 155, 155); }
+.bg-4 { background-color: rgb(109, 109, 109); }
+.bg-5 { background-color: rgb(61, 61, 61); }
+.bg-6 { background-color: rgb(48, 48, 48); }
+.bg-7 { background-color: rgb(48, 48, 48); }
+.bg-8 { background-color: rgb(29, 29, 29); }
+.bg-9 { background-color: rgb(0, 0, 0); }
+.bg-box { background-color: white; }
+.bg-yellow { background-color: rgb(245, 207, 82); }
+.bg-red { background-color: rgb(255, 129, 129); }
+.bg-green { background-color: rgb(122, 224, 122); }
+
+/* Text color */
+.color-info { color: gray; }
+.color-red { color: rgb(173, 24, 24); }
+
+/* Margins and Paddings */
+.pad-0, .pad-1, .pad-2, .pad-3{ box-sizing: border-box; }
+.pad-0{ padding: 5px; }
+.pad-1{ padding: 7px; }
+.pad-2{ padding: 10px; }
+.pad-3{ padding: 15px; }
+.mg-0{ margin: 3px; }
+.mg-1{ margin: 5px; }
+.mg-2{ margin: 10px; }
+.mg-3{ margin: 15px; }
+
+/* Custom Button */
+button{
+    border: 1px solid gray;
+    background-color: rgb(240, 240, 240);
+    color: black;
+    min-height: 24px;
+}
+button:hover{
+    background-color: rgb(223, 223, 223);
+}
+button:active{
+    background-color: rgb(190, 190, 190);
+}
+
+/* Custom paragraph */
+h1{
+    font-size: 28px;
+    margin: 0;
+    font-weight: 400;
+}
+h2{
+    font-size: 20px;
+    margin: 0;
+    font-weight: 400;
+}
+hr {
+    margin-left: 0;
+    margin-right: 0;
+    border: none;
+    border-bottom: 1px solid rgb(105, 105, 105);
+}
+p{
+    margin: 5px 0px;
+}
