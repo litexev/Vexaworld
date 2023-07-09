@@ -1,5 +1,5 @@
 import { Scene } from './scene.js';
-import { Window } from './ui/window.js';
+import { PixelDrawer } from './ui/pixelDrawer.js';
 export class Game{
     constructor(opt){
         this.lastTime = null;
@@ -30,7 +30,8 @@ export class Game{
         this.ui.style.position = 'absolute';
         this.container.appendChild(this.ui);
 
-        this.window = new Window(this.ui);
+        // @TODO: TEMPORARY to hide window testing on github pages
+        if(window.location.host == 'localhost:5500') this.window = new PixelDrawer(this.ui);
     }
     start(){
         // temporary debug scene

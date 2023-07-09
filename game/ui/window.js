@@ -7,7 +7,7 @@ export class Window{
         this.isDragging = false;
         this.prevDragX = 0;
         this.prevDragY = 0;
-        this.createUI(uiElem, "test window", "img/test.png", 400, 450);
+        // this.createUI(uiElem, "test window", "img/test.png", 400, 450);
     }
     createUI(uiElem, windowTitle, windowIcon, width, height){
         this.mainWindow = this.liet.new({type: "div", class: "v-box border-box bg-3 mainWindow", parent: uiElem});
@@ -22,7 +22,7 @@ export class Window{
         this.titleText = this.liet.new({type: "div", class: "titleText", value: windowTitle, parent: this.titleBar});
         this.titleStretch = this.liet.new({type: "div", class: "stretch", parent: this.titleBar});
         this.titleCloseBtn = this.liet.new({type: "button", class: "titleCloseBtn", parent: this.titleBar, value: "X"});
-        this.windowContent = this.liet.new({type: "div", class: "v-box stretch bg-0 pad-2", parent: this.mainWindow});
+        this.windowContent = this.liet.new({type: "div", class: "v-box stretch bg-0 pad-2 gap-3", parent: this.mainWindow});
         // drag code
         this.titleBar.addEventListener('mousedown', (e) => {
             e.preventDefault();
