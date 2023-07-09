@@ -1,8 +1,8 @@
 import { ObjectPlacer } from './objectPlacer.js';
-import { ColorBox } from './colorBox.js';
-import { ImageBox } from './imageBox.js';
-import { ClimbBox } from './climbBox.js';
-import { OverlayBox } from './overlayBox.js';
+import { ColorBox } from './box/colorBox.js';
+import { ImageBox } from './box/imageBox.js';
+import { ClimbBox } from './box/climbBox.js';
+import { OverlayBox } from './box/overlayBox.js';
 import { Player } from './player.js';
 import { DebugText } from './debugText.js';
 export class Scene {
@@ -13,19 +13,19 @@ export class Scene {
         this.viewOffsetY = 0;
 
         this.bg = new Image();
-        this.bg.src = 'bg.png';
+        this.bg.src = 'img/bg.png';
 
         this.objectPlacer = new ObjectPlacer(this);
         this.objects.push(this.objectPlacer);
         this.debugText = new DebugText(this);
-        this.player = new Player({x: 300, y: 444, width: 48 - 2, height: 48 + 24, image: 'player.png'}, this)
+        this.player = new Player({x: 300, y: 444, width: 48 - 2, height: 48 + 24, image: 'img/player.png'}, this)
         this.objects.push(this.player);
     }
     loadTestScene() {
         for (let u = 0; u < 6; u++) {
             for (let i = 0; i < 50; i++) {
-                let img = 'grass.png'
-                if(u > 0) img = 'dirt.png'
+                let img = 'img/grass.png'
+                if(u > 0) img = 'img/dirt.png'
                 this.objects.push(new ImageBox({x: i * 48, y: (48 * 10)+(u * 48), width: 48, height: 48, image: img}, this));
             }
         }

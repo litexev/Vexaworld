@@ -1,11 +1,11 @@
-import { Transform } from './transform.js';
+import { Transform } from '../transform.js';
 import { ImageBox } from './imageBox.js';
-import { Player } from './player.js';
-import { KeyHandler } from './keyHandler.js';
+import { Player } from '../player.js';
+import { KeyHandler } from '../keyHandler.js';
 export class ClimbBox extends ImageBox {
     constructor(opt, scene) {
         super(opt, scene);
-        this.image.src = opt.image || "vine.png";
+        this.image.src = opt.image || "img/vine.png";
         this.solid = false;
 
         // important

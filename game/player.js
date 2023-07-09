@@ -1,5 +1,5 @@
-import { PhysBox } from './physBox.js';
-import { ClimbBox } from './climbBox.js';
+import { PhysBox } from './box/physBox.js';
+import { ClimbBox } from './box/climbBox.js';
 import { KeyHandler } from './keyHandler.js';
 
 export class Player extends PhysBox{   

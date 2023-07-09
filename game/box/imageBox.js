@@ -1,10 +1,10 @@
-import { Transform } from './transform.js';
+import { Transform } from '../transform.js';
 
 export class ImageBox extends Transform {
     constructor(opt, scene) {
         super(opt, scene);
         this.image = new Image();
-        this.image.src = opt.image || 'block.png';
+        this.image.src = opt.image || 'img/block.png';
         this.flip = opt.flip || false;
         this.solid = opt.solid || true;
         this.alpha = opt.alpha || 1;

@@ -2,7 +2,7 @@ import { ImageBox } from './imageBox.js';
 export class WaterBox extends ImageBox {
     constructor(opt, scene) {
         super(opt, scene);
-        this.image.src = "water.png";
+        this.image.src = "img/water.png";
         this.solid = false;
         
         // this lets you swim

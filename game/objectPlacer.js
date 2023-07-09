@@ -1,9 +1,9 @@
-import { ColorBox } from './colorBox.js';
-import { ImageBox } from './imageBox.js';
-import { PhysBox } from './physBox.js';
-import { PushBox } from './pushBox.js';
-import { ClimbBox } from './climbBox.js';
-import { WaterBox } from './waterBox.js';
+import { ColorBox } from './box/colorBox.js';
+import { ImageBox } from './box/imageBox.js';
+import { PhysBox } from './box/physBox.js';
+import { PushBox } from './box/pushBox.js';
+import { ClimbBox } from './box/climbBox.js';
+import { WaterBox } from './box/waterBox.js';
 import { KeyHandler } from './keyHandler.js';
 import { Player } from './player.js';
 
@@ -35,7 +35,7 @@ export class ObjectPlacer extends ImageBox{
         this.mouseY = 0;
 
         this.blockClass = ImageBox;
-        this.blockProps = {image: "block.png"}
+        this.blockProps = {image: "img/block.png"}
         
         this.buildSound = new Howl({src: "sfx/build.wav"})
         this.buildSound.volume(0.1)
@@ -43,10 +43,10 @@ export class ObjectPlacer extends ImageBox{
         // temporary cycler
         this.cycleIndex = 0;
         this.cycle = [
-            {blockClass: ImageBox, blockProps: {image: "block.png"}, previewImage: "block.png", objectSize: 48},
-            {blockClass: ClimbBox, blockProps: {image: "ladder.png"}, previewImage: "ladder.png", objectSize: 48},
-            {blockClass: WaterBox, blockProps: {image: "water.png"}, previewImage: "water.png", objectSize: 48},
-            {blockClass: PushBox, blockProps: {image: "right.png"}, previewImage: "right.png", objectSize: 48},
+            {blockClass: ImageBox, blockProps: {image: "img/block.png"}, previewImage: "img/block.png", objectSize: 48},
+            {blockClass: ClimbBox, blockProps: {image: "img/ladder.png"}, previewImage: "img/ladder.png", objectSize: 48},
+            {blockClass: WaterBox, blockProps: {image: "img/water.png"}, previewImage: "img/water.png", objectSize: 48},
+            {blockClass: PushBox, blockProps: {image: "img/right.png"}, previewImage: "img/right.png", objectSize: 48},
         ]
         this.keyHandler = new KeyHandler();
         this.scene.game.canvas.addEventListener('mousedown', (e) => {
@@ -105,7 +105,7 @@ export class ObjectPlacer extends ImageBox{
         this.blockClass = opt.blockClass;
         this.blockProps = opt.blockProps || {};
         this.objectSize = opt.objectSize || 48;
-        this.setImage(opt.previewImage || "block.png")
+        this.setImage(opt.previewImage || "img/block.png")
     }
     createBox(e){
         let isColliding = false;

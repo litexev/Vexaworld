@@ -1,11 +1,11 @@
-import { Transform } from './transform.js';
+import { Transform } from '../transform.js';
 import { ImageBox } from './imageBox.js';
-import { Player } from './player.js';
+import { Player } from '../player.js';
 
 export class PushBox extends ImageBox {
     constructor(opt, scene) {
         super(opt, scene);
-        this.image.src = "right.png";
+        this.image.src = "img/right.png";
         this.solid = false;
         this.overlay = true;
         this.rotation = 0;
@@ -17,16 +17,16 @@ export class PushBox extends ImageBox {
         switch(this.rotation){
             // @ TODO: use this.setImage("url") instead
             case 0:
-                this.image.src = "right.png";
+                this.image.src = "img/right.png";
                 break;
             case 1:
-                this.image.src = "down.png";
+                this.image.src = "img/down.png";
                 break;
             case 2:
-                this.image.src = "left.png";
+                this.image.src = "img/left.png";
                 break;
             case 3:
-                this.image.src = "up.png";
+                this.image.src = "img/up.png";
                 break;
         }
     }
