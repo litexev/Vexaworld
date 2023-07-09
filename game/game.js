@@ -1,5 +1,5 @@
 import { Scene } from './scene.js';
-import { Window } from './window.js';
+import { Window } from './ui/window.js';
 export class Game{
     constructor(opt){
         this.lastTime = null;
@@ -30,7 +30,7 @@ export class Game{
         this.ui.style.position = 'absolute';
         this.container.appendChild(this.ui);
 
-        // this.window = new Window(this.ui);
+        this.window = new Window(this.ui);
     }
     start(){
         // temporary debug scene

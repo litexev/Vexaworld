@@ -7,15 +7,18 @@ export class Window{
         this.isDragging = false;
         this.prevDragX = 0;
         this.prevDragY = 0;
-        this.createUI(uiElem, "test window");
+        this.createUI(uiElem, "test window", "img/test.png", 400, 450);
     }
-    createUI(uiElem, windowTitle){
+    createUI(uiElem, windowTitle, windowIcon, width, height){
         this.mainWindow = this.liet.new({type: "div", class: "v-box border-box bg-3 mainWindow", parent: uiElem});
-        this.mainWindow.style.width = '270px';
-        this.mainWindow.style.height = '270px';
+        this.mainWindow.style.width = width + 'px';
+        this.mainWindow.style.height = height + 'px';
         this.mainWindow.style.position = 'absolute';
-        this.titleBar = this.liet.new({type: "div", class: "h-box bg-4 h-stretch titleBar h-center", parent: this.mainWindow});
+        // @TODO: center the window or something similar
+        this.titleBar = this.liet.new({type: "div", class: "h-box bg-4 gap-2 h-stretch titleBar h-center", parent: this.mainWindow});
         this.titleBar.style.userSelect = "none";
+        this.titleImg = this.liet.new({type: "img", class: "titleImg", parent: this.titleBar});
+        this.titleImg.src = windowIcon;
         this.titleText = this.liet.new({type: "div", class: "titleText", value: windowTitle, parent: this.titleBar});
         this.titleStretch = this.liet.new({type: "div", class: "stretch", parent: this.titleBar});
         this.titleCloseBtn = this.liet.new({type: "button", class: "titleCloseBtn", parent: this.titleBar, value: "X"});
@@ -30,7 +33,7 @@ export class Window{
         this.mainWindow.addEventListener('mouseup', () => {
             if(this.isDragging) this.isDragging = false;
         })
-        this.mainWindow.addEventListener('mousemove', (e) => {
+        window.addEventListener('mousemove', (e) => {
             e.preventDefault();
             if(this.isDragging){
                 let newX = this.prevDragX - e.clientX;
@@ -40,6 +43,11 @@ export class Window{
                 this.mainWindow.style.left = (this.mainWindow.offsetLeft - newX) + 'px';
                 this.mainWindow.style.top = (this.mainWindow.offsetTop - newY) + 'px';
             }
+        })
+        // close button
+        this.titleCloseBtn.addEventListener('click', () => {
+            uiElem.remove(this.mainWindow);
+            delete this;
         })
     }
 }
