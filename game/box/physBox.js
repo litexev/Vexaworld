@@ -87,8 +87,8 @@ export class PhysBox extends ImageBox {
     reduceVelocityOverTime(deltaTime, reductionRate){
 
         this.velX *= 1 - (reductionRate * deltaTime);
-        // We only need to reduce the y velocity if gravity isn't doing it for us
-        if(!this.useGravity) this.velY *= 1 - (reductionRate/3 * deltaTime);
+        // We only need to reduce the y velocity if gravity isn't doing it for us (we can also reuse this for water)
+        if(!this.useGravity || this.onWater) this.velY *= 1 - (reductionRate/3 * deltaTime);
 
         // Terminal velocity limits
         this.velX = clamp(this.velX, -10, 10);
