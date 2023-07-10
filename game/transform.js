@@ -50,7 +50,6 @@ export class Transform {
     }
     altclick(){
         // debug feature: log block to console
-        // @TODO: add some sort of debug mode to enable this
         console.log(this);
     }
     intersects(other){

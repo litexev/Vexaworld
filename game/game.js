@@ -18,9 +18,6 @@ export class Game{
         this.canvas = document.createElement('canvas');
         this.container.appendChild(this.canvas);
 
-        // @TODO: expand with container
-        this.canvas.width = '800';
-        this.canvas.height = '600';
         this.canvas.style.position = 'absolute';
         this.ctx = this.canvas.getContext('2d');
 

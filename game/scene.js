@@ -36,12 +36,11 @@ export class Scene {
         // this.objects.push(new ClimbBox({x: 48 * 10, y: 48 * 4, width: 48, height: 48, color: 'lightblue'}, this));
     }
     draw(ctx) {
-        // draw background
-        // @TODO: horrible hack
+        // @TODO: draw tiling background properly
         //ctx.setTransform( 1, 0, 0, 1, Math.round(this.viewOffsetX), Math.round(this.viewOffsetY));
         //ctx.fillStyle = ctx.createPattern(this.bg, 'repeat');
         //ctx.fillRect(-50000, -50000, 100000, 1000000);
-        //ctx.setTransform( 1, 0, 0, 1, 0, 0);
+        //dctx.setTransform( 1, 0, 0, 1, 0, 0);
 
         // draw objects and object placer
         this.objects.forEach(obj => {
@@ -54,7 +53,6 @@ export class Scene {
         this.objectPlacer.update(ctx);
 
         // debug text
-        // @TODO: probably move this to a seperate class
         this.debugText.update(ctx)
     }
     update(deltaTime){
