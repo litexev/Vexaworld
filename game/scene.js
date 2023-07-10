@@ -18,7 +18,7 @@ export class Scene {
         this.objectPlacer = new ObjectPlacer(this);
         this.objects.push(this.objectPlacer);
         this.debugText = new DebugText(this);
-        this.player = new Player({x: 300, y: 444, width: 48 - 2, height: 48 + 24, image: 'img/player.png'}, this)
+        this.player = new Player({x: 300, y: 440, width: 48 - 2, height: 48 + 24, image: 'img/player.png'}, this)
         this.objects.push(this.player);
     }
     loadTestScene() {

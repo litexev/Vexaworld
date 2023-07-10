@@ -25,10 +25,11 @@ export class Player extends PhysBox{
             this.noCollide = true;
         }
 
-        // Reset if both checks failed
-        if(!this.onLadder && !this.noclip){
+        // Reset if all checks failed
+        if(!this.onLadder && !this.onWater && !this.noclip){
             this.useGravity = true;
             this.noCollide = false;
+            this.onWater = false;
         }
         
         // Update Physbox
@@ -86,16 +87,14 @@ export class Player extends PhysBox{
 
     ladderCheck(){
         let foundLadder = false;
+        let foundWater = false;
         this.scene.objects.forEach(obj => {
             if(obj.isLadder && obj.intersects(this)){
                 foundLadder = true;
-                if(obj instanceof WaterBox){
-                    this.onWater = true;
-                }else{
-                    this.onWater = false;
-                }
+                if(obj instanceof WaterBox) this.foundWater = true;
             }
         })
+        this.onWater = this.foundWater;
         return foundLadder;
     }
 
