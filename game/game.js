@@ -1,5 +1,7 @@
 import { Scene } from './scene.js';
 import { PixelDrawer } from './ui/pixelDrawer.js';
+import { clamp } from './utils.js';
+
 export class Game{
     constructor(opt){
         this.lastTime = null;
@@ -31,7 +33,7 @@ export class Game{
         this.container.appendChild(this.ui);
 
         // @TODO: TEMPORARY to hide window testing on github pages
-        if(window.location.host == 'localhost:5500') this.window = new PixelDrawer(this.ui);
+        // if(window.location.host == '127.0.0.1:5500') this.window = new PixelDrawer(this.ui);
     }
     start(){
         // temporary debug scene
@@ -45,8 +47,8 @@ export class Game{
         // calculate deltatime
         let deltaTime = this.lastTime ? (timestamp - this.lastTime) : 0;
         this.lastTime = timestamp;
-        deltaTime = Math.min(deltaTime, 50);
-        
+        deltaTime = clamp(deltaTime, 0.1, 30);
+
         // resize canvas if neccessary
         if(this.canvas.width != this.container.style.offsetWidth || this.canvas.height != this.container.offsetHeight){
             this.canvas.width = this.container.offsetWidth;

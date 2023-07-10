@@ -38,10 +38,10 @@ export class Scene {
     draw(ctx) {
         // draw background
         // @TODO: horrible hack
-        ctx.setTransform( 1, 0, 0, 1, Math.round(this.viewOffsetX), Math.round(this.viewOffsetY));
-        ctx.fillStyle = ctx.createPattern(this.bg, 'repeat');
-        ctx.fillRect(-50000, -50000, 100000, 1000000);
-        ctx.setTransform( 1, 0, 0, 1, 0, 0);
+        //ctx.setTransform( 1, 0, 0, 1, Math.round(this.viewOffsetX), Math.round(this.viewOffsetY));
+        //ctx.fillStyle = ctx.createPattern(this.bg, 'repeat');
+        //ctx.fillRect(-50000, -50000, 100000, 1000000);
+        //ctx.setTransform( 1, 0, 0, 1, 0, 0);
 
         // draw objects and object placer
         this.objects.forEach(obj => {

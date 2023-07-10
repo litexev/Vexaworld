@@ -56,22 +56,16 @@ export class Transform {
     intersects(other){
         if(this.ignoreIntersects) return false;
 
-        let meWidth = this.hitboxWidth
         let otherWidth = other.hitboxWidth
         let meHeight = this.hitboxHeight
         let otherHeight = other.hitboxHeight
 
-        let meX = this.x
-        let otherX = other.x
-
-        let meY = this.y
-        let otherY = other.y
 
         return (
-            meX <= otherX + otherWidth &&
-            meX + meWidth >= otherX &&
-            meY <= otherY + otherHeight &&
-            meY + meHeight >= otherY
+            this.x <= other.x + otherWidth &&
+            this.x + this.hitboxWidth >= other.x &&
+            this.y <= other.y + otherHeight &&
+            this.y + meHeight >= other.y
         );
     }
     willIntersect(x, y, width, height){
@@ -84,4 +78,20 @@ export class Transform {
             this.y + this.hitboxHeight >= y
         );
     }
+    // This used to be a hack for ladders but may be useful in the future
+    /*isIntersectTop(other){
+        if(this.ignoreIntersects) return false;
+    
+        let otherWidth = other.hitboxWidth
+        let otherHeight = other.hitboxHeight
+    
+        // Check if the other object intersects with the top half of this object
+        return (
+            this.x <= other.x + otherWidth &&
+            this.x + this.hitboxWidth >= other.x &&
+            this.y <= other.y + otherHeight &&
+            other.y + otherHeight <= this.y + this.hitboxHeight / 2
+        );
+    }*/
+    
 }
