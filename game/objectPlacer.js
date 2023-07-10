@@ -45,11 +45,14 @@ export class ObjectPlacer extends ImageBox{
             {blockClass: WaterBox, blockProps: {image: "img/water.png"}, previewImage: "img/water.png", objectSize: 48},
             {blockClass: PushBox, blockProps: {image: "img/right.png"}, previewImage: "img/right.png", objectSize: 48},
         ]
+
         this.keyHandler = new KeyHandler();
+
         this.scene.game.canvas.addEventListener('mousedown', (e) => {
             this.mouseDown = true;
-            this.affectBlock();
+            this.affectBlock(true);
         });
+        
         // temporary cycler
         this.scene.game.canvas.addEventListener('wheel', (e) => {
             if(e.deltaY > 0) this.cycleIndex += 1
@@ -58,35 +61,36 @@ export class ObjectPlacer extends ImageBox{
             this.setBlock(this.cycle[this.cycleIndex]);
             this.buildSound.play();
         })
+
         this.scene.game.canvas.addEventListener('mouseup', (e) => {
             this.mouseDown = false;
         });
+
         this.scene.game.canvas.addEventListener('mousemove', (e) => {
             this.mouseX = e.clientX;
             this.mouseY = e.clientY;
             if(this.mouseDown){
-                this.affectBlock();
+                this.affectBlock(false);
             }
         });
+
     }
-    affectBlock(){
+    affectBlock(allowAltMode){
         let breakMode = this.keyHandler.isPressed("ControlLeft");
         let altMode = this.keyHandler.isPressed("AltLeft") || this.keyHandler.isPressed("AltRight");
         let replaceMode = this.keyHandler.isPressed("ShiftLeft") || this.keyHandler.isPressed("ShiftRight");
-
-        if(altMode){
-            this.altBox();
-            return
-        }
-
         // Only run these if we're not on the same block
         if(this.posChanged){
-            if(replaceMode && this.posChanged){
+            if(altMode){
+                if(allowAltMode) this.altBox();
+                return
+            }
+            if(replaceMode){
                 this.destroyBox();
                 this.createBox();
                 return
             }
-            if(breakMode && this.posChanged){
+            if(breakMode){
                 this.destroyBox();
                 return
             }
