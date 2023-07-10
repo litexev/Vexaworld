@@ -10,6 +10,7 @@ export class ImageBox extends Transform {
         this.alpha = opt.alpha || 1;
     }
     draw(ctx, viewOffsetX, viewOffsetY){
+        if(this.hidden) return;
         let accX = this.x;
         let accY = this.y;
 

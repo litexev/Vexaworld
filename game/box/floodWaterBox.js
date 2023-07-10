@@ -1,87 +1,39 @@
-import { Transform } from './transform.js';
-import { ColorBox } from './colorBox.js';
-import { Player } from './player.js';
-
-export class FloodWaterBox extends ColorBox {
+import { Transform } from '../transform.js';
+import { ImageBox } from './imageBox.js';
+import { Player } from '../player.js';
+import { rndInt } from '../utils.js';
+export class FloodWaterBox extends ImageBox {
     constructor(opt, scene) {
         super(opt, scene);
-        this.color = opt.color || 'rgba(71, 109, 222, 0.5)';
+        this.image.src = opt.image || 'img/floodWater.png';
         this.solid = opt.solid || false;
         this.tickPassed = 0;
     }
     update(deltaTime){
         super.update(deltaTime);
         this.tickPassed += deltaTime;
-        console.log(this.tickPassed);
-        if(this.tickPassed > 300){
+        if(this.tickPassed > (100 + rndInt(0,1000))){
             this.doIteration()
             this.tickPassed = 0;
         }
-        // console.log(this.checkUp(), this.checkDown(), this.checkLeft(), this.checkRight());
 
     }
     doIteration(){
-        if(!this.checkDown() && !this.checkWaterDown()){
-                this.createWater(0, 48);
-        }else if(!this.checkUp()){
-            if(!this.checkLeft()){
-                this.scene.objects.push(new WaterBox({x: this.x - 48, y: this.y, width: this.width, height: this.height, color: this.color}, this.scene));
-            }
-            if(!this.checkRight()){
-                this.scene.objects.push(new WaterBox({x: this.x + 48, y: this.y, width: this.width, height: this.height, color: this.color}, this.scene));
-            } 
-        }
-        if(!this.checkUp() && this.checkLeft() && this.checkRight() && this.checkDown()){
-            this.scene.objects.push(new WaterBox({x: this.x, y: this.y - 48, width: this.width, height: this.height, color: this.color}, this.scene));
-        }
+        if(!this.checkDirection(0, 1)) this.createWater(0, 1)
+        // if(!this.checkUp()) this.createWater(0, -1)
+        if(!this.checkDirection(-1, 0)) this.createWater(-1, 0)
+        if(!this.checkDirection(1, 0)) this.createWater(1, 0)
     }
     createWater(xOffset, yOffset){
-        this.scene.objects.push(new WaterBox({x: this.x + xOffset, y: this.y + yOffset, width: this.width, height: this.height, color: this.color}, this.scene));
+        this.scene.objects.push(new FloodWaterBox({x: this.x + (xOffset * 48), y: this.y + (yOffset * 48), width: this.width, height: this.height, color: this.color}, this.scene));
     }
-    checkDown(){
+    checkDirection(xOffset, yOffset){
         let theObj = false;
         this.scene.objects.forEach(obj => {
-            if(obj !== this && !(obj instanceof WaterBox) && !(obj instanceof Player) && obj.willIntersect(this.x, this.y + 48, this.width, this.height)){
+            if(obj !== this && !(obj instanceof Player) && obj.willIntersect(this.x + (xOffset * 48) + 1, this.y + (yOffset * 48) + 1, this.width - 2, this.height - 2)){
                 theObj = obj;
             }
         })
         return theObj;
-    }
-    checkWaterDown(){
-        let theObj = false;
-        this.scene.objects.forEach(obj => {
-            if(obj !== this && obj instanceof WaterBox && obj.willIntersect(this.x, this.y + 48, this.width, this.height)){
-                theObj = true;
-            }
-        })
-        return theObj;
-    }
-    
-    checkUp(){
-        let found = false;
-        this.scene.objects.forEach(obj => {
-            if(obj !== this && !(obj instanceof Player) && obj.willIntersect(this.x, this.y - 48, this.width, this.height)){
-                found = true;
-            }
-        })
-        return found;
-    }
-    checkLeft(){
-        let found = false;
-        this.scene.objects.forEach(obj => {
-            if(obj !== this && !(obj instanceof Player) && obj.willIntersect(this.x - 48, this.y, this.width, this.height)){
-                found = true;
-            }
-        })
-        return found;
-    }
-    checkRight(){
-        let found = false;
-        this.scene.objects.forEach(obj => {
-            if(obj !== this && !(obj instanceof Player) && obj.willIntersect(this.x + 48, this.y, this.width, this.height)){
-                found = true;
-            }
-        })
-        return found;
     }
 }

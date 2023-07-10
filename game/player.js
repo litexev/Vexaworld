@@ -13,6 +13,7 @@ export class Player extends PhysBox{
         this.hitboxWidth = this.width / 2;
         this.hitboxHeight = this.height / 2;
         this.onLadder = false;
+        this.onWater = false;
     }
     
     update(deltaTime){
@@ -108,7 +109,7 @@ export class Player extends PhysBox{
             if(this.velY < 0) this.velY = this.velY * 3;
         }
         this.onLadder = this.ladderCheck();
-        (this.onLadder) ? this.useGravity = false : this.useGravity = true;
+        (this.onLadder && !this.onWater) ? this.useGravity = false : this.useGravity = true;
     }
 
     doLadderMovement(deltaTime, xSpeed, ySpeed){

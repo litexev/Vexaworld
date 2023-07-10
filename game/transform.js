@@ -13,31 +13,37 @@ export class Transform {
         this.hitboxHeight = this.height;
 
         // Clone the visual and hitbox size (disable to change the hitbox size independently)
-        this.accurateHitbox = true;
+        this.accurateHitbox = opt.accurateHitbox || true;
         
         // Whether the hitbox height should be centered (for objects) or at the bottom (for players)
-        this.bottomHitbox = false;
+        this.bottomHitbox = opt.bottomHitbox || false;
 
         // Whether this object's update should be called multiple times per frame (used for physics)
-        this.needsSubstep = false;
+        this.needsSubstep = opt.needsSubstep || false;
 
         // Whether this object can always be placed on top of other objects
-        this.overlay = false;
+        this.overlay = opt.overlay || false;
 
         // Whether physics and the player can pass through this object (but it can't through others)
         this.solid = opt.solid || false;
 
         // Whether this object should ignore all intersects (used for UI like the object placer)
-        this.ignoreIntersects = false;
+        this.ignoreIntersects = opt.ignoreIntersects || false;
 
         // Internal object used for ladders to pause player gravity
-        this.isLadder = false;
+        this.isLadder = opt.isLadder || false;
 
         // Draw a debug overlay showing the object's actual hitbox
-        this.debugHitbox = false;
+        this.debugHitbox = opt.debugHitbox || false;
+
+        // Print the object's position to console every frame
+        this.debugPos = opt.debugPos || false;
 
         // The scene this object belongs to
         this.scene = scene;
+
+        // Whether to render the object
+        this.hidden = false;
     }
     draw(ctx){
         // stub
@@ -47,6 +53,7 @@ export class Transform {
             this.hitboxWidth = this.width;
             this.hitboxHeight = this.height;
         }
+        if(this.debugPos) console.log(this.x, this.y)
     }
     altclick(){
         // debug feature: log block to console
