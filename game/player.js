@@ -14,8 +14,23 @@ export class Player extends PhysBox{
         this.hitboxHeight = this.height / 2;
         this.onLadder = false;
     }
+    
     update(deltaTime){
+        // Physics pre-config
         this.doLadderConfig();
+        if(this.noclip){
+            console.log("noclip on")
+            this.useGravity = false;
+            this.noCollide = true;
+        }
+
+        // Reset if both checks failed
+        if(!this.onLadder && !this.noclip){
+            this.useGravity = true;
+            this.noCollide = false;
+        }
+        
+        // Update Physbox
         super.update(deltaTime);
 
         // Scene view autoscroll with lerping
@@ -30,18 +45,26 @@ export class Player extends PhysBox{
         this.scene.viewOffsetX += (targetX - this.scene.viewOffsetX) * lerpSpeedX * deltaTime;
         this.scene.viewOffsetY += (targetY - this.scene.viewOffsetY) * lerpSpeedY * deltaTime;
 
-        // Noclip toggle @TODO: restrict this somehow
-        if(this.keyHandler.isPressed("KeyV")){
-            this.noclip = !this.noclip;
+        // Noclip toggle
+        // @TODO: We should be using the keyHandler for this
+        window.onkeydown = (e) => {
+            if(e.code == "KeyV"){
+                this.noclip = !this.noclip;
+            }
         }
+
+        // Select right type fo movement
         if(this.noclip){
             this.doLadderMovement(deltaTime, 0.02, 0.4);
             return
         }
-        // console.log(this.onLadder);
-        // Choose right type of movement
-        (!this.onLadder) ? this.doNormalMovement(deltaTime) : this.doLadderMovement(deltaTime, 0.01, 0.2);
+        if(this.onLadder){
+            this.doLadderMovement(deltaTime, 0.01, 0.2);
+            return
+        }
+        this.doNormalMovement(deltaTime);
     }
+
     doNormalMovement(deltaTime){
         // Normal movement (left and right)
         if(this.keyHandler.isPressed("ArrowLeft") || this.keyHandler.isPressed("KeyA")){
@@ -59,6 +82,7 @@ export class Player extends PhysBox{
             }
         }
     }
+
     ladderCheck(){
         let foundLadder = false;
         this.scene.objects.forEach(obj => {
@@ -73,6 +97,7 @@ export class Player extends PhysBox{
         })
         return foundLadder;
     }
+
     doLadderConfig(){
         if(this.ladderCheck() == true && this.onLadder == false){
             // ladder entered, remove existing velocity
@@ -85,6 +110,7 @@ export class Player extends PhysBox{
         this.onLadder = this.ladderCheck();
         (this.onLadder) ? this.useGravity = false : this.useGravity = true;
     }
+
     doLadderMovement(deltaTime, xSpeed, ySpeed){
         // Ladder movement (up, down, left, right)
         if(this.keyHandler.isPressed("ArrowLeft") || this.keyHandler.isPressed("KeyA")){
@@ -96,16 +122,12 @@ export class Player extends PhysBox{
             this.flip = 0;
         }
         if(this.keyHandler.isPressed("Space") || this.keyHandler.isPressed("ArrowUp") || this.keyHandler.isPressed("KeyW")){
-            if(this.isGrounded || this.onLadder){
-                this.isGrounded = false;
-                this.velY = -ySpeed;
-            }
+            this.isGrounded = false;
+            this.velY = -ySpeed;
         }
         if(this.keyHandler.isPressed("ArrowDown") || this.keyHandler.isPressed("KeyS")){
-            if(this.isGrounded || this.onLadder){
-                this.isGrounded = false;
-                this.velY = ySpeed;
-            }
+            this.isGrounded = false;
+            this.velY = ySpeed;
         }
     }
 }
