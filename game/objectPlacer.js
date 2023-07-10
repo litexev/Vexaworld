@@ -6,11 +6,8 @@ import { ClimbBox } from './box/climbBox.js';
 import { WaterBox } from './box/waterBox.js';
 import { KeyHandler } from './keyHandler.js';
 import { Player } from './player.js';
+import { mod } from './utils.js';
 
-// @TODO: move to math utils
-function mod(n, m) {
-    return ((n % m) + m) % m;
-}
 function snapToGrid(number, step){
     return Math.round(number / step) * step
 }
@@ -50,24 +47,14 @@ export class ObjectPlacer extends ImageBox{
         ]
         this.keyHandler = new KeyHandler();
         this.scene.game.canvas.addEventListener('mousedown', (e) => {
-            // @TODO: refactor
-            // @TODO: bug where sometimes mousedown is called and mousemove afterwards, 
-            // better checking for duplicate actions like storing prevX and prevY with block threshold
             this.mouseDown = true;
-            let breakMode = this.keyHandler.isPressed("ControlLeft");
-            let altMode = this.keyHandler.isPressed("AltLeft") || this.keyHandler.isPressed("AltRight");
-            let replaceMode = this.keyHandler.isPressed("ShiftLeft") || this.keyHandler.isPressed("ShiftRight");
-            if(altMode) this.altBox(e);
-            if(replaceMode && !altMode && !breakMode && this.posChanged) this.destroyBox(e);
-            if(!breakMode && !altMode && this.posChanged) this.createBox(e);
-            if(breakMode && !altMode) this.destroyBox(e);
-            this.posChanged = false;
+            this.affectBlock();
         });
         // temporary cycler
         this.scene.game.canvas.addEventListener('wheel', (e) => {
-            if(e.deltaY > 0) this.cycleIndex = mod(this.cycleIndex + 1, this.cycle.length)
-            if(e.deltaY < 0) this.cycleIndex = mod(this.cycleIndex - 1, this.cycle.length)
-            // console.log(this.cycleIndex);
+            if(e.deltaY > 0) this.cycleIndex += 1
+            if(e.deltaY < 0) this.cycleIndex -= 1
+            this.cycleIndex = mod(this.cycleIndex, this.cycle.length)
             this.setBlock(this.cycle[this.cycleIndex]);
             this.buildSound.play();
         })
@@ -75,20 +62,37 @@ export class ObjectPlacer extends ImageBox{
             this.mouseDown = false;
         });
         this.scene.game.canvas.addEventListener('mousemove', (e) => {
-            // @TODO: refactor
             this.mouseX = e.clientX;
             this.mouseY = e.clientY;
             if(this.mouseDown){
-                let breakMode = this.keyHandler.isPressed("ControlLeft") || this.keyHandler.isPressed("ControlRight");
-                let altMode = this.keyHandler.isPressed("AltLeft") || this.keyHandler.isPressed("AltRight");
-                let replaceMode = this.keyHandler.isPressed("ShiftLeft") || this.keyHandler.isPressed("ShiftRight");
-                if(replaceMode && !altMode && !breakMode && this.posChanged) this.destroyBox(e);
-                if(!breakMode && !altMode && this.posChanged) this.createBox(e);
-                if(breakMode && !altMode) this.destroyBox(e);
-                if(altMode && this.posChanged) this.altBox(e);
-                this.posChanged = false;
+                this.affectBlock();
             }
         });
+    }
+    affectBlock(){
+        let breakMode = this.keyHandler.isPressed("ControlLeft");
+        let altMode = this.keyHandler.isPressed("AltLeft") || this.keyHandler.isPressed("AltRight");
+        let replaceMode = this.keyHandler.isPressed("ShiftLeft") || this.keyHandler.isPressed("ShiftRight");
+
+        if(altMode){
+            this.altBox();
+            return
+        }
+
+        // Only run these if we're not on the same block
+        if(this.posChanged){
+            if(replaceMode && this.posChanged){
+                this.destroyBox();
+                this.createBox();
+                return
+            }
+            if(breakMode && this.posChanged){
+                this.destroyBox();
+                return
+            }
+            this.createBox();
+            this.posChanged = false;
+        }
     }
     update(ctx){
         super.update(ctx);
@@ -107,7 +111,8 @@ export class ObjectPlacer extends ImageBox{
         this.objectSize = opt.objectSize || 48;
         this.setImage(opt.previewImage || "img/block.png")
     }
-    createBox(e){
+    createBox(){
+        console.log("lets create")
         let isColliding = false;
         this.scene.objects.forEach(obj => {
             if (obj.willIntersect(this.x + 1, this.y + 1, this.blockSize - 2, this.blockSize - 2) && !obj.overlay) {
@@ -129,7 +134,7 @@ export class ObjectPlacer extends ImageBox{
         this.scene.objects.push(newBlock);
         this.buildSound.play();
     }
-    destroyBox(e){
+    destroyBox(){
         this.scene.objects.forEach(obj => {
             if (obj.willIntersect(this.x + 1, this.y + 1, this.blockSize - 2, this.blockSize - 2)) {
                 if(!(obj instanceof Player)){
@@ -138,7 +143,7 @@ export class ObjectPlacer extends ImageBox{
             }
         });
     }
-    altBox(e){
+    altBox(){
         this.scene.objects.forEach(obj => {
             if (obj.willIntersect(this.x + 1, this.y + 1, this.blockSize - 2, this.blockSize - 2)) {
                 if(!(obj instanceof Player)){
