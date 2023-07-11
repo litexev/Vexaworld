@@ -18,7 +18,7 @@ export class Scene {
         this.objectPlacer = new ObjectPlacer(this);
         this.objects.push(this.objectPlacer);
         this.debugText = new DebugText(this);
-        this.player = new Player({x: 300, y: 440, width: 48 - 2, height: 48 + 24, image: 'img/player.png'}, this)
+        this.player = new Player({x: 300, y: 0, width: 48, height: 48 + 24, image: 'img/player.png'}, this)
         this.objects.push(this.player);
     }
     loadTestScene() {
@@ -26,13 +26,13 @@ export class Scene {
             for (let i = 0; i < 50; i++) {
                 let img = 'img/grass.png'
                 if(u > 0) img = 'img/dirt.png'
-                this.objects.push(new ImageBox({x: i * 48, y: (48 * 10)+(u * 48), width: 48, height: 48, image: img}, this));
+                this.objects.push(new ImageBox({x: i * 48, y: (u * 48)+48, image: img}, this));
             }
         }
-        this.objects.push(new ColorBox({x: 48 * 5, y: 48 * 9, width: 48, height: 48, color: 'lightblue'}, this));
-        this.objects.push(new ColorBox({x: 48 * 2, y: 48 * 9, width: 48, height: 48, color: 'lightblue'}, this));
-        this.objects.push(new ColorBox({x: 48 * 2, y: 48 * 8, width: 48, height: 48, color: 'lightblue'}, this));
-        this.objects.push(new OverlayBox({x: 48 * 3, y: 48 * 2, width: 192, height: 192, image: 'rainbow.png'}, this));
+        this.objects.push(new ImageBox({x: 48 * 5, y: 0, image: 'img/blueblock.png'}, this));
+        this.objects.push(new ImageBox({x: 48 * 2, y: 0, image: 'img/blueblock.png'}, this));
+        this.objects.push(new ImageBox({x: 48 * 2, y: -48, image: 'img/blueblock.png'}, this));
+        // this.objects.push(new OverlayBox({x: 48 * 3, y: -(48*7), width: 192, height: 192, image: 'img/rainbow.png'}, this));
         // this.objects.push(new ClimbBox({x: 48 * 10, y: 48 * 4, width: 48, height: 48, color: 'lightblue'}, this));
     }
     draw(ctx) {

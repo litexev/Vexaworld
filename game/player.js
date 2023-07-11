@@ -22,6 +22,7 @@ export class Player extends PhysBox{
         if(this.noclip){
             this.useGravity = false;
             this.noCollide = true;
+            this.ignoreIntersects = true;
         }
 
         // Reset if all checks failed
@@ -30,7 +31,8 @@ export class Player extends PhysBox{
             this.noCollide = false;
             this.onWater = false;
         }
-        
+
+        if(!this.noclip) this.ignoreIntersects = false;
         // Update Physbox
         super.update(deltaTime);
         // Scene view autoscroll with lerping
@@ -90,7 +92,7 @@ export class Player extends PhysBox{
         this.scene.objects.forEach(obj => {
             if(obj.isLadder && obj.intersects(this)){
                 foundLadder = true;
-                if(obj instanceof WaterBox) this.foundWater = true;
+                if(obj instanceof WaterBox) foundWater = true;
             }
         })
         this.onWater = this.foundWater;

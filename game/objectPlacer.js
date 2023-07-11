@@ -43,7 +43,7 @@ export class ObjectPlacer extends ImageBox{
         // temporary cycler
         this.cycleIndex = 0;
         this.cycle = [
-            {blockClass: PhysBox, blockProps: {image: "img/block.png", hitboxWidth: 46, hitboxHeight: 46}, previewImage: "img/block.png", objectWidth: 48, objectHeight: 48},
+            {blockClass: ImageBox, blockProps: {image: "img/block.png", hitboxWidth: 46, hitboxHeight: 46}, previewImage: "img/block.png", objectWidth: 48, objectHeight: 48},
             {blockClass: ImageBox, blockProps: {image: "img/wideblock.png"}, previewImage: "img/wideblock.png", objectWidth: 96, objectHeight: 48},
             {blockClass: ClimbBox, blockProps: {image: "img/ladder.png"}, previewImage: "img/ladder.png", objectSize: 48},
             {blockClass: WaterBox, blockProps: {image: "img/water.png"}, previewImage: "img/water.png", objectSize: 48},
@@ -146,8 +146,8 @@ export class ObjectPlacer extends ImageBox{
         newBlock.height = this.blockHeight;
 
         // bug workaround
-        newBlock.hitboxWidth = this.blockProps.hitboxWidth || this.blockWidth;
-        newBlock.hitboxHeight = this.blockProps.hitboxHeight || this.blockHeight;
+        newBlock.hitboxWidth = this.blockProps.hitboxWidth || newBlock.hitboxWidth;
+        newBlock.hitboxHeight = this.blockProps.hitboxHeight || newBlock.hitboxHeight;
 
         this.scene.objects.push(newBlock);
 

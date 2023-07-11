@@ -62,16 +62,21 @@ export class Transform {
     intersects(other){
         if(this.ignoreIntersects) return false;
 
-        let otherWidth = other.hitboxWidth
-        let meHeight = this.hitboxHeight
-        let otherHeight = other.hitboxHeight
-
+        return (
+            this.x <= other.x + other.hitboxWidth &&
+            this.x + this.hitboxWidth >= other.x &&
+            this.y <= other.y + other.hitboxHeight &&
+            this.y + this.hitboxHeight >= other.y
+        );
+    }
+    inside(other){
+        if(this.ignoreIntersects) return false;
 
         return (
-            this.x <= other.x + otherWidth &&
-            this.x + this.hitboxWidth >= other.x &&
-            this.y <= other.y + otherHeight &&
-            this.y + meHeight >= other.y
+            (this.x+1) <= other.x + other.hitboxWidth &&
+            (this.x+1) + (this.hitboxWidth-2) >= other.x &&
+            (this.y+1) <= other.y + other.hitboxHeight &&
+            (this.y+1) + (this.hitboxHeight-2) >= other.y
         );
     }
     willIntersect(x, y, width, height){
@@ -82,6 +87,15 @@ export class Transform {
             this.x + this.hitboxWidth >= x &&
             this.y <= y + height &&
             this.y + this.hitboxHeight >= y
+        );
+    }
+    willBeInside(x, y, width, height){
+        if(this.ignoreIntersects) return false;
+        return (
+            (this.x+1) <= x + width &&
+            (this.x+1) + (this.hitboxWidth-2) >= x &&
+            (this.y+1) <= y + height &&
+            (this.y+1) + (this.hitboxHeight-2) >= y
         );
     }
     // This used to be a hack for ladders but may be useful in the future

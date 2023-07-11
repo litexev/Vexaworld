@@ -10,6 +10,8 @@ export class PushBox extends ImageBox {
         this.solid = false;
         this.overlay = true;
         this.rotation = 0;
+        this.accurateHitbox = false;
+        this.hitboxWidth, this.hitboxHeight = 48/2, 48/2;
     }
     altclick(){
         super.altclick();
@@ -32,7 +34,7 @@ export class PushBox extends ImageBox {
     update(deltaTime){
         super.update(deltaTime);
         this.scene.objects.forEach(obj => {
-            if((obj instanceof Player || obj instanceof PhysBox) && this.intersects(obj)){
+            if((obj instanceof Player || obj instanceof PhysBox) && this.inside(obj)){
                 switch(this.rotation){
                     case 0:
                         obj.velX = 1;
