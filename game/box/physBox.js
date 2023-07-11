@@ -1,7 +1,7 @@
 import { ImageBox } from './imageBox.js';
 import { WaterBox } from './waterBox.js';
 import { clamp } from '../utils.js';
-
+import { rndInt } from '../utils.js';
 function negativeOnly(number) {
     if (number < 0) {
       return number; // Return the negative float
@@ -21,7 +21,7 @@ export class PhysBox extends ImageBox {
     onWater = false;
     constructor(opt, scene) {
         super(opt, scene);
-        this.debugHitbox = false;
+
         this.needsSubstep = true;
         this.solid = opt.solid || true;
 
@@ -58,19 +58,35 @@ export class PhysBox extends ImageBox {
     }
 
     applyNewPosition(deltaTime){
-        if (this.canMoveX() || this.noCollide) this.x = this.newX;
+        // if (this.canMoveX() || this.noCollide) this.x = this.newX;
+
         if (this.canMoveY() || this.noCollide){
-            this.y += this.velY * deltaTime;
+            this.y = this.newY
             this.setGrounded(false)
         }else{
             if(this.isBelow(this.yBlocker)){
+                this.velY = 0;
                 this.snapBottom(this.yBlocker);
                 this.setGrounded(true);
             }else{
                 this.velY = 0;
                 this.snapTop(this.yBlocker);
+                this.setGrounded(false);
             }
         }
+
+        if (this.canMoveX() || this.noCollide){
+            this.x = this.newX
+        }else{
+            if(this.isLeft(this.xBlocker)){
+                this.velX = 0;
+                this.snapLeft(this.xBlocker);
+            }else{
+                this.velX = 0;
+                this.snapRight(this.xBlocker);
+            }
+        }
+        
     }
     
     setGrounded(ground){
@@ -83,7 +99,7 @@ export class PhysBox extends ImageBox {
     }
     canMoveX() {
         for (const obj of this.scene.objects) {
-            if (obj !== this && obj.willIntersect(this.newX, this.y - 1, this.hitboxWidth, this.hitboxHeight) && obj.solid) {
+            if (obj !== this && obj.willIntersect(this.newX, this.y + 1, this.hitboxWidth, this.hitboxHeight - 2) && obj.solid) {
                 this.xBlocker = obj;
                 return false;
             }
@@ -93,7 +109,7 @@ export class PhysBox extends ImageBox {
 
     canMoveY() {
         for (const obj of this.scene.objects) {
-            if (obj !== this && obj.willIntersect(this.x, this.newY, this.hitboxWidth, this.hitboxHeight) && obj.solid) {
+            if (obj !== this && obj.willIntersect(this.x, this.newY + 1, this.hitboxWidth, this.hitboxHeight) && obj.solid) {
                 this.yBlocker = obj;
                 return false;
             }
@@ -121,8 +137,23 @@ export class PhysBox extends ImageBox {
         this.y = obj.y + obj.hitboxHeight;
     }
 
+    snapLeft(obj){
+        if(obj.x === this.x + this.hitboxWidth) return;
+        console.log("we snapping left")
+        this.x = obj.x - this.hitboxWidth - 1;
+    }
+
+    snapRight(obj){
+        if(obj.x + obj.hitboxWidth === this.x) return;
+        this.x = obj.x + obj.hitboxWidth + 1;
+    }
+
     isBelow(obj){
-        return this.y + this.hitboxHeight - 1< obj.y;
+        return this.y + this.hitboxHeight - 1 < obj.y;
+    }
+
+    isLeft(obj){
+        return this.x + this.hitboxWidth - 1 < obj.x;
     }
 
 }

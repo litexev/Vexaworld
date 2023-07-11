@@ -58,6 +58,7 @@ export class Scene {
     update(deltaTime){
         this.objects.forEach(obj => {
             if(obj.needsSubstep){
+                // @TODO: do we even need substeps anymore
                 for(let i = 0; i < 1; i++){
                     obj.update(deltaTime / 1);
                 }

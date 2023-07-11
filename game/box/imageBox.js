@@ -1,5 +1,4 @@
 import { Transform } from '../transform.js';
-
 export class ImageBox extends Transform {
     constructor(opt, scene) {
         super(opt, scene);

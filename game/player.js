@@ -20,7 +20,6 @@ export class Player extends PhysBox{
         // Physics pre-config
         this.doLadderConfig();
         if(this.noclip){
-            console.log("noclip on")
             this.useGravity = false;
             this.noCollide = true;
         }
@@ -34,7 +33,6 @@ export class Player extends PhysBox{
         
         // Update Physbox
         super.update(deltaTime);
-
         // Scene view autoscroll with lerping
         let targetOffsetX = this.scene.game.canvas.width / 3;
         let targetOffsetY = this.scene.game.canvas.height / 1.6;
@@ -78,6 +76,7 @@ export class Player extends PhysBox{
             this.flip = 0;
         }
         if(this.keyHandler.isPressed("Space") || this.keyHandler.isPressed("ArrowUp")){
+            console.log("JUMP!")
             if(this.isGrounded || this.onLadder){
                 this.isGrounded = false;
                 this.velY = -0.8;
