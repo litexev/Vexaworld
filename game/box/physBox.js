@@ -19,6 +19,7 @@ export class PhysBox extends ImageBox {
     newX;
     newY;
     onWater = false;
+    lastGrounded = false;
     constructor(opt, scene) {
         super(opt, scene);
 
@@ -37,6 +38,7 @@ export class PhysBox extends ImageBox {
 
         this.xBlocker = null;
         this.yBlocker = null;
+
     }
 
     update(deltaTime) {
@@ -44,6 +46,12 @@ export class PhysBox extends ImageBox {
         this.calculateNewPosition(deltaTime);
         this.applyNewPosition(deltaTime);
         this.reduceVelocityOverTime(deltaTime, 0.05);
+
+        // Only play land sound if grounded status changed after physics calc
+        if(this.isGrounded != this.lastGrounded){
+            if(this.isGrounded) this.landSound.play();
+            this.lastGrounded = this.isGrounded;
+        }
     }
 
     applyGravity(deltaTime) {
@@ -92,7 +100,6 @@ export class PhysBox extends ImageBox {
     setGrounded(ground){
         if(ground && !this.isGrounded){
             this.isGrounded = true;
-            this.landSound.play();
         } else if(!ground && this.isGrounded){
             this.isGrounded = false;
         }

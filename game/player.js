@@ -18,21 +18,26 @@ export class Player extends PhysBox{
     
     update(deltaTime){
         // Physics pre-config
-        this.doLadderConfig();
+        this.doLadderBoost();
+        this.onLadder = this.ladderCheck();
+
+        this.useGravity = true;
+        this.noCollide = false;
+        this.ignoreIntersects = false;
+
+        if(this.onLadder) this.useGravity = false;
+        if(this.onWater) this.useGravity = true;
+
         if(this.noclip){
             this.useGravity = false;
             this.noCollide = true;
             this.ignoreIntersects = true;
         }
 
-        // Reset if all checks failed
-        if(!this.onLadder && !this.onWater && !this.noclip){
-            this.useGravity = true;
-            this.noCollide = false;
-            this.onWater = false;
+        // DEBUG temp
+        if(this.keyHandler.isPressed("KeyE")){
+            this.velY = 2;
         }
-
-        if(!this.noclip) this.ignoreIntersects = false;
         // Update Physbox
         super.update(deltaTime);
         // Scene view autoscroll with lerping
@@ -95,11 +100,11 @@ export class Player extends PhysBox{
                 if(obj instanceof WaterBox) foundWater = true;
             }
         })
-        this.onWater = this.foundWater;
+        this.onWater = foundWater;
         return foundLadder;
     }
 
-    doLadderConfig(){
+    doLadderBoost(){
         if(this.ladderCheck() == true && this.onLadder == false){
             // ladder entered, remove existing velocity
             this.velY = 0;
@@ -108,8 +113,6 @@ export class Player extends PhysBox{
             // ladder exited, give a small boost to help exiting
             if(this.velY < 0) this.velY = this.velY * 3;
         }
-        this.onLadder = this.ladderCheck();
-        (this.onLadder && !this.onWater) ? this.useGravity = false : this.useGravity = true;
     }
 
     doLadderMovement(deltaTime, xSpeed, ySpeed){
@@ -123,11 +126,9 @@ export class Player extends PhysBox{
             this.flip = 0;
         }
         if(this.keyHandler.isPressed("Space") || this.keyHandler.isPressed("ArrowUp") || this.keyHandler.isPressed("KeyW")){
-            this.isGrounded = false;
             this.velY = -ySpeed;
         }
         if(this.keyHandler.isPressed("ArrowDown") || this.keyHandler.isPressed("KeyS")){
-            this.isGrounded = false;
             this.velY = ySpeed;
         }
     }

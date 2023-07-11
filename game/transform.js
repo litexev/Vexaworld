@@ -71,7 +71,7 @@ export class Transform {
     }
     inside(other){
         if(this.ignoreIntersects) return false;
-
+        
         return (
             (this.x+1) <= other.x + other.hitboxWidth &&
             (this.x+1) + (this.hitboxWidth-2) >= other.x &&
@@ -91,6 +91,7 @@ export class Transform {
     }
     willBeInside(x, y, width, height){
         if(this.ignoreIntersects) return false;
+
         return (
             (this.x+1) <= x + width &&
             (this.x+1) + (this.hitboxWidth-2) >= x &&

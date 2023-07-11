@@ -34,19 +34,19 @@ export class PushBox extends ImageBox {
     update(deltaTime){
         super.update(deltaTime);
         this.scene.objects.forEach(obj => {
-            if((obj instanceof Player || obj instanceof PhysBox) && this.inside(obj)){
+            if((obj instanceof Player || obj instanceof PhysBox) && !obj.noclip && this.inside(obj)){
                 switch(this.rotation){
                     case 0:
                         obj.velX = 1;
                         break;
                     case 1:
-                        obj.velY = 1;
+                        obj.velY = 0.7;
                         break;
                     case 2:
                         obj.velX = -1;
                         break;
                     case 3:
-                        obj.velY = -0.5;
+                        obj.velY = -0.7;
                         break;
                 }
             }
