@@ -22,7 +22,7 @@ export class PhysBox extends ImageBox {
     lastGrounded = false;
     constructor(opt, scene) {
         super(opt, scene);
-
+        this.type = "physbox";
         this.needsSubstep = true;
         this.solid = opt.solid || true;
 
@@ -38,7 +38,6 @@ export class PhysBox extends ImageBox {
 
         this.xBlocker = null;
         this.yBlocker = null;
-
     }
 
     update(deltaTime) {

@@ -40,3 +40,16 @@ canvas{
     min-width: 24px !important;
     min-height: 18px !important;
 }
+
+.color:hover{
+    box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.199);
+}
+
+.placerHud .headerText{
+    color: white;
+    font-size: 13px;
+}
+.placerHud .bottomText{
+    color: gray;
+    font-size: 12px;
+}

@@ -15,7 +15,7 @@ export class Scene {
         this.bg = new Image();
         this.bg.src = 'img/bg.png';
 
-        this.objectPlacer = new ObjectPlacer(this);
+        this.objectPlacer = new ObjectPlacer(this, this.game.hud.placerHud);
         this.objects.push(this.objectPlacer);
         this.debugText = new DebugText(this);
         this.player = new Player({x: 300, y: 0, width: 48, height: 48 + 24, image: 'img/player.png'}, this)

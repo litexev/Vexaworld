@@ -6,6 +6,7 @@ export class OverlayBox extends ImageBox {
         this.image.src = opt.image || "img/rainbow.png";
         this.solid = false;
         this.overlay = true;
+        this.type = "overlay";
     }
 
 }

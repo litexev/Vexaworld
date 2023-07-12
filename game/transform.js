@@ -48,6 +48,8 @@ export class Transform {
 
         // The rotation of the object
         this.rotation = 0;
+
+        this.type = "transform";
     }
     draw(ctx){
         // stub

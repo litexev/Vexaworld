@@ -7,6 +7,7 @@ export class ImageBox extends Transform {
         this.flip = opt.flip || false;
         this.solid = opt.solid || true;
         this.alpha = opt.alpha || 1;
+        this.type = "solid";
     }
     draw(ctx, viewOffsetX, viewOffsetY){
         if(this.hidden) return;

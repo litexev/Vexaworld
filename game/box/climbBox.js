@@ -7,7 +7,7 @@ export class ClimbBox extends ImageBox {
         super(opt, scene);
         this.image.src = opt.image || "img/ladder.png";
         this.solid = false;
-
+        this.type = "ladder";
         // important
         this.isLadder = true;
     }

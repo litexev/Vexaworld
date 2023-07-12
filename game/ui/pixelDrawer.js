@@ -12,7 +12,8 @@ export class PixelDrawer extends Window{
         this.pixelScale = 8;
         this.penSize = 2;
         this.color = "black";
-        this.palette = ["#472d3c", "#5e3643", "#7a444a", "#a05b53", "#bf7958", "#eea160", "#f4cca1", "#b6d53c", "#71aa34", "#397b44", "#3c5956", "#302c2e", "#5a5353", "#7d7071", "#a0938e", "#cfc6b8", "#dff6f5", "#8aebf1", "#28ccdf", "#3978a8", "#394778", "#39314b", "#564064", "#8e478c", "#cd6093", "#ffaeb6", "#f4b41b", "#f47e1b", "#e6482e", "#a93b3b", "#827094", "#4f546b"]
+        // this.palette = ["#472d3c", "#5e3643", "#7a444a", "#a05b53", "#bf7958", "#eea160", "#f4cca1", "#b6d53c", "#71aa34", "#397b44", "#3c5956", "#302c2e", "#5a5353", "#7d7071", "#a0938e", "#cfc6b8", "#dff6f5", "#8aebf1", "#28ccdf", "#3978a8", "#394778", "#39314b", "#564064", "#8e478c", "#cd6093", "#ffaeb6", "#f4b41b", "#f47e1b", "#e6482e", "#a93b3b", "#827094", "#4f546b"]
+        this.palette = ["#060608", "#141013", "#3b1725", "#73172d", "#b4202a", "#df3e23", "#fa6a0a", "#f9a31b", "#ffd541", "#fffc40", "#d6f264", "#9cdb43", "#59c135", "#14a02e", "#1a7a3e", "#24523b", "#122020", "#143464", "#285cc4", "#249fde", "#20d6c7", "#a6fcdb", "#ffffff", "#fef3c0", "#fad6b8", "#f5a097", "#e86a73", "#bc4a9b", "#793a80", "#403353", "#242234", "#221c1a", "#322b28", "#71413b", "#bb7547", "#dba463", "#f4d29c", "#dae0ea", "#b3b9d1", "#8b93af", "#6d758d", "#4a5462", "#333941", "#422433", "#5b3138", "#8e5252", "#ba756a", "#e9b5a3", "#e3e6ff", "#b9bffb", "#849be4", "#588dbe", "#477d85", "#23674e", "#328464", "#5daf8d", "#92dcba", "#cdf7e2", "#e4d2aa", "#c7b08b", "#a08662", "#796755", "#5a4e44", "#423934"]
         this.paletteIndex = 0;
         this.color = this.palette[0];
         this.blockTypes = {
@@ -40,7 +41,7 @@ export class PixelDrawer extends Window{
         this.stateSelect = this.liet.new({type: "select", class: "stateSelect", parent: this.topLayout});
 
         this.smallCanvasLayout = this.liet.new({type: "div", class: "v-box center smallCanvasLayout", parent: this.windowContent});
-        this.smallCanvas = this.liet.new({type: "canvas", class: "canvas bg-0 border", parent: this.smallCanvasLayout});
+        this.smallCanvas = this.liet.new({type: "canvas", class: "canvas bg-1", parent: this.smallCanvasLayout});
         this.smallCanvas.width = 48;
         this.smallCanvas.height = 48;
 
@@ -77,8 +78,8 @@ export class PixelDrawer extends Window{
     createPaletteButtons(){
         this.palette.forEach(color => {
             let colorElem = this.liet.new({type: "div", class: "color", parent: this.colorsLayout});
-            colorElem.style.width = "32px";
-            colorElem.style.height = "32px";
+            colorElem.style.width = "24px";
+            colorElem.style.height = "24px";
             colorElem.style.backgroundColor = color;
             colorElem.onclick = () => {
                 this.color = color
@@ -181,10 +182,6 @@ export class PixelDrawer extends Window{
         this.preCtx.fillRect(x, y, pxScale, pxScale);
     }
 
-    // adapted from https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
-    // @TODO: move to utils
-
-
     drawPixel(ctx, x, y, scale){
         ctx.fillStyle = this.color;
         ctx.fillRect(x, y, scale, scale);
@@ -261,6 +258,7 @@ export class PixelDrawer extends Window{
         }
         ctx.putImageData( pixels, 0, 0 ) ;
     }
+
     getColorAtPos(ctx, x, y) {     
         if (x < 0 || y < 0 || x >= this.smallCanvas.width || y >= this.smallCanvas.height) {
           return false;

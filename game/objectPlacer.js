@@ -11,7 +11,7 @@ import { FloodWaterBox } from './box/floodWaterBox.js';
 
 
 export class ObjectPlacer extends ImageBox{
-    constructor(scene){
+    constructor(scene, hud){
         super({}, scene);
         this.solid = false;
         this.ignoreIntersects = true;
@@ -43,14 +43,16 @@ export class ObjectPlacer extends ImageBox{
         this.rotateSound = new Howl({src: "sfx/rotate.wav"})
         this.rotateSound.volume(1);
 
+        this.hud = hud;
+
         // temporary cycler
         this.cycleIndex = 0;
         this.cycle = [
-            {class: ImageBox, props: {image: "img/block.png"}, preview: "img/block.png",},
-            {class: ClimbBox, props: {image: "img/ladder.png"}, preview: "img/ladder.png"},
-            {class: WaterBox, props: {image: "img/water.png"}, preview: "img/water.png"},
-            {class: PushBox, props: {image: "img/right.png"}, preview: "img/right.png"},
-            {class: ImageBox, props: {image: "img/wideblock.png"}, preview: "img/wideblock.png", width: 96, height: 48}
+            {class: ImageBox, props: {image: "img/block.png"}, preview: "img/block.png", type:"solid", name: "Metal Block"},
+            {class: ClimbBox, props: {image: "img/ladder.png"}, preview: "img/ladder.png", type:"ladder", name: "Ladder"},
+            {class: WaterBox, props: {image: "img/water.png"}, preview: "img/water.png", type:"water", name: "Water"},
+            {class: PushBox, props: {image: "img/right.png"}, preview: "img/right.png", type:"pusher", name:"Pusher"},
+            //{class: ImageBox, props: {image: "img/wideblock.png"}, preview: "img/wideblock.png", width: 96, height: 48}
         ]
         this.setBlock(this.cycle[0]);
 
@@ -159,6 +161,9 @@ export class ObjectPlacer extends ImageBox{
         this.width = this.blockWidth;
         this.height = this.blockHeight;
         this.setImage(opt.preview || "img/block.png")
+
+        // hud
+        this.hud.setContent(opt.preview || "img/block.png", opt.name, opt.type);
     }
 
     createBox(){

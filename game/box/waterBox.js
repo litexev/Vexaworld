@@ -4,6 +4,7 @@ export class WaterBox extends ImageBox {
         super(opt, scene);
         this.image.src = "img/water.png";
         this.solid = false;
+        this.type = "water";
         
         // this lets you swim
         this.isLadder = true;

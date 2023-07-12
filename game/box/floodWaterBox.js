@@ -8,6 +8,7 @@ export class FloodWaterBox extends ImageBox {
         this.image.src = opt.image || 'img/floodWater.png';
         this.solid = opt.solid || false;
         this.tickPassed = 0;
+        this.type = "floodwater"
     }
     update(deltaTime){
         super.update(deltaTime);

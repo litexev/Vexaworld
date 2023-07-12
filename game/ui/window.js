@@ -11,6 +11,9 @@ export class Window{
     }
     createUI(uiElem, windowTitle, windowIcon, width, height){
         this.mainWindow = this.liet.new({type: "div", class: "v-box border-box bg-3 mainWindow", parent: uiElem});
+        // hide all windows by default unless they're shown
+        this.mainWindow.style.display = "none";
+        this.mainWindow.style.pointerEvents = "auto";
         this.mainWindow.style.width = width + 'px';
         this.mainWindow.style.height = height + 'px';
         this.mainWindow.style.position = 'absolute';
@@ -46,8 +49,13 @@ export class Window{
         })
         // close button
         this.titleCloseBtn.addEventListener('click', () => {
-            uiElem.remove(this.mainWindow);
-            delete this;
+            this.hide();
         })
+    }
+    show(){
+        this.mainWindow.style.display = "flex";
+    }
+    hide(){
+        this.mainWindow.style.display = "none";
     }
 }
