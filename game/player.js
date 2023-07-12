@@ -83,7 +83,6 @@ export class Player extends PhysBox{
             this.flip = 0;
         }
         if(this.keyHandler.isPressed("Space") || this.keyHandler.isPressed("ArrowUp")){
-            console.log("JUMP!")
             if(this.isGrounded || this.onLadder){
                 this.isGrounded = false;
                 this.velY = -0.8;

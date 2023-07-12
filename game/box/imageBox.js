@@ -12,11 +12,11 @@ export class ImageBox extends Transform {
         if(this.hidden) return;
         let accX = this.x;
         let accY = this.y;
-
+    
         // apply viewoffset
         accX += viewOffsetX;
         accY += viewOffsetY;
-
+    
         // apply hitbox correction
         if(!this.bottomHitbox){
             // center the hitbox
@@ -29,17 +29,25 @@ export class ImageBox extends Transform {
         // round so it's pixel-perfect
         accX = Math.round(accX);
         accY = Math.round(accY);
-
+    
         ctx.save();
         ctx.globalAlpha = this.alpha;
+        
+        // Translate to image center regardless of flip
+        ctx.translate(accX + this.width / 2, accY + this.height / 2);
+        
+        // Rotate image
+        ctx.rotate(this.rotation * Math.PI / 2);
+    
         if (this.flip) {
             ctx.scale(-1, 1);
-            ctx.drawImage(this.image, -accX - this.width, accY, this.width, this.height);
+            ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
         } else {
-            ctx.drawImage(this.image, accX, accY, this.width, this.height);
+            ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
         }
+    
         ctx.restore();
-
+    
         ctx.globalAlpha = 1;
         if(this.debugHitbox){
             // hitbox visualizer
@@ -47,6 +55,7 @@ export class ImageBox extends Transform {
             ctx.fillRect(this.x + viewOffsetX, this.y + viewOffsetY, this.hitboxWidth, this.hitboxHeight);
         }
     }
+    
     setImage(url){
         this.image.src = url;
     }

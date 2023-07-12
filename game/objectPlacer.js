@@ -6,12 +6,10 @@ import { ClimbBox } from './box/climbBox.js';
 import { WaterBox } from './box/waterBox.js';
 import { KeyHandler } from './keyHandler.js';
 import { Player } from './player.js';
-import { mod } from './utils.js';
+import { mod, snapToGrid } from './utils.js';
 import { FloodWaterBox } from './box/floodWaterBox.js';
 
-function snapToGrid(number, step){
-    return Math.round(number / step) * step
-}
+
 export class ObjectPlacer extends ImageBox{
     constructor(scene){
         super({}, scene);
@@ -23,6 +21,8 @@ export class ObjectPlacer extends ImageBox{
         this.y = 0;
         this.prevX = 0;
         this.prevY = 0;
+        this.lastBlock = null;
+        this.blockChanged = false;
         this.posChanged = false;
 
         this.blockWidth = 48;
@@ -38,25 +38,36 @@ export class ObjectPlacer extends ImageBox{
         this.blockProps = {image: "img/block.png"}
         
         this.buildSound = new Howl({src: "sfx/build.wav"})
-        this.buildSound.volume(0.1)
+        this.buildSound.volume(0.2);
+
+        this.rotateSound = new Howl({src: "sfx/rotate.wav"})
+        this.rotateSound.volume(1);
 
         // temporary cycler
         this.cycleIndex = 0;
         this.cycle = [
-            {blockClass: ImageBox, blockProps: {image: "img/block.png", hitboxWidth: 46, hitboxHeight: 46}, previewImage: "img/block.png", objectWidth: 48, objectHeight: 48},
-            {blockClass: ImageBox, blockProps: {image: "img/wideblock.png"}, previewImage: "img/wideblock.png", objectWidth: 96, objectHeight: 48},
-            {blockClass: ClimbBox, blockProps: {image: "img/ladder.png"}, previewImage: "img/ladder.png", objectSize: 48},
-            {blockClass: WaterBox, blockProps: {image: "img/water.png"}, previewImage: "img/water.png", objectSize: 48},
-            {blockClass: PushBox, blockProps: {image: "img/right.png"}, previewImage: "img/right.png", objectSize: 48},
-            {blockClass: FloodWaterBox, blockProps: {image: "img/floodWater.png"}, previewImage: "img/floodWater.png", objectSize: 48},
-
+            {class: ImageBox, props: {image: "img/block.png"}, preview: "img/block.png",},
+            {class: ClimbBox, props: {image: "img/ladder.png"}, preview: "img/ladder.png"},
+            {class: WaterBox, props: {image: "img/water.png"}, preview: "img/water.png"},
+            {class: PushBox, props: {image: "img/right.png"}, preview: "img/right.png"},
+            {class: ImageBox, props: {image: "img/wideblock.png"}, preview: "img/wideblock.png", width: 96, height: 48}
         ]
         this.setBlock(this.cycle[0]);
+
         this.keyHandler = new KeyHandler();
 
         this.scene.game.canvas.addEventListener('mousedown', (e) => {
-            this.mouseDown = true;
-            this.affectBlock(true);
+            if(e.button === 0){
+                // Left click to place etc
+                this.mouseDown = true;
+                this.affectBlock(true);
+            }else if(e.button === 2){
+                // Rotate placement on right click
+                console.log("right click!")
+                this.rotation = (this.rotation + 1) % 4
+                e.preventDefault();
+            }
+            
         });
         
         // temporary cycler
@@ -80,21 +91,51 @@ export class ObjectPlacer extends ImageBox{
             }
         });
 
+        // @TODO: will cause problems with ui input
+        window.addEventListener('keydown', (e) => {
+            if(e.code == "KeyR"){
+                if (e.repeat) { return }
+                this.rotation = (this.rotation + 1) % 4
+                this.rotateSound.play();
+            }
+        });
     }
-    affectBlock(allowAltMode){
+    affectBlock(allowModify){
         let breakMode = this.keyHandler.isPressed("ControlLeft");
         let altMode = this.keyHandler.isPressed("AltLeft") || this.keyHandler.isPressed("AltRight");
+        let rotateMode = this.keyHandler.isPressed("KeyR");
+        let resetMode = this.keyHandler.isPressed("KeyT");
+        let currentBlock = this.getBlockAtPos();
 
-        // Only run these if we're not on the same block
-        if(this.posChanged){
+        this.blockChanged = false;
+        if(this.lastBlock !== currentBlock){
+            this.lastBlock = currentBlock;
+            this.blockChanged = true
+        }
+
+        if(currentBlock != false && (allowModify || this.blockChanged)){
+            if(rotateMode){
+                currentBlock.rotate(1);
+                this.rotateSound.play();
+                return;
+            }
+            if(resetMode){
+                currentBlock.rotation = 0;
+                this.rotateSound.play();
+                return;
+            }
             if(altMode){
-                if(allowAltMode) this.altBox();
-                return
+                currentBlock.altclick();
+                return;
             }
             if(breakMode){
-                this.destroyBox();
-                return
+                this.destroyBox(currentBlock);
+                return;
             }
+        }
+        // @TODO: why??????
+        if(rotateMode || resetMode || altMode || breakMode) return;
+        if(!currentBlock && this.posChanged){
             this.createBox();
             this.posChanged = false;
         }
@@ -111,27 +152,22 @@ export class ObjectPlacer extends ImageBox{
         }
     }
     setBlock(opt){
-        this.blockClass = opt.blockClass;
-        this.blockProps = opt.blockProps || {};
-        this.blockWidth = opt.objectWidth || 48;
-        this.blockHeight = opt.objectHeight || 48;
+        this.blockClass = opt.class;
+        this.blockProps = opt.props || {};
+        this.blockWidth = opt.width || 48;
+        this.blockHeight = opt.height || 48;
         this.width = this.blockWidth;
         this.height = this.blockHeight;
-        this.setImage(opt.previewImage || "img/block.png")
+        this.setImage(opt.preview || "img/block.png")
     }
-    createBox(){
-        let isColliding = false;
-        this.scene.objects.forEach(obj => {
-            if (obj.willIntersect(this.x + 1, this.y + 1, this.blockWidth - 2, this.blockHeight - 2) && !obj.overlay) {
-                isColliding = true;
-            }
-        });
 
+    createBox(){
         let newBlock = new this.blockClass(this.blockProps, this.scene);
         newBlock.hidden = true;
-        if( isColliding && !newBlock.overlay ) return;
         newBlock.x = this.x;
         newBlock.y = this.y;
+
+        newBlock.rotation = this.rotation;
 
         // @TODO: support for bottom hitbox
         if(!newBlock.accurateHitbox){
@@ -142,6 +178,7 @@ export class ObjectPlacer extends ImageBox{
                 newBlock.y += (newBlock.height - newBlock.hitboxHeight ) / 2
             }
         }
+
         newBlock.width = this.blockWidth;
         newBlock.height = this.blockHeight;
 
@@ -154,22 +191,20 @@ export class ObjectPlacer extends ImageBox{
         newBlock.hidden = false;
         this.buildSound.play();
     }
-    destroyBox(){
-        this.scene.objects.forEach(obj => {
-            if (obj.willIntersect(this.x + 1, this.y + 1, this.blockWidth - 2, this.blockHeight - 2)) {
-                if(!(obj instanceof Player)){
-                    this.scene.objects.splice(this.scene.objects.indexOf(obj), 1);
-                }
-            }
-        });
+
+    destroyBox(obj){
+        this.scene.objects.splice(this.scene.objects.indexOf(obj), 1);
     }
-    altBox(){
+
+    getBlockAtPos(){
+        this.foundBlock = false;
         this.scene.objects.forEach(obj => {
             if (obj.willIntersect(this.x + 1, this.y + 1, this.blockWidth - 2, this.blockHeight - 2)) {
                 if(!(obj instanceof Player)){
-                    obj.altclick();
+                    this.foundBlock = obj;
                 }
             }
         });
+        return this.foundBlock;
     }
 }

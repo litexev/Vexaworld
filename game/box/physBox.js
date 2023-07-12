@@ -34,7 +34,7 @@ export class PhysBox extends ImageBox {
         
         // Sound played when the object is grounded
         this.landSound = new Howl({src: opt.landSound || 'sfx/land.ogg'});
-        this.landSound.volume(0.3)
+        this.landSound.volume(0.2)
 
         this.xBlocker = null;
         this.yBlocker = null;
@@ -146,7 +146,6 @@ export class PhysBox extends ImageBox {
 
     snapLeft(obj){
         if(obj.x === this.x + this.hitboxWidth) return;
-        console.log("we snapping left")
         this.x = obj.x - this.hitboxWidth - 1;
     }
 

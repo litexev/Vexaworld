@@ -28,9 +28,14 @@ export class Game{
         this.ui.style.zIndex = 1000;
         this.ui.style.position = 'absolute';
         this.container.appendChild(this.ui);
-
-        // @TODO: TEMPORARY to hide window testing on github pages
-        // if(window.location.host == '127.0.0.1:5500') this.window = new PixelDrawer(this.ui);
+        
+        // disable browser context menu
+        // @TODO: not on whole window
+        window.addEventListener('contextmenu', function(e) { 
+            e.preventDefault();
+        }, false);
+        
+        this.window = new PixelDrawer(this.ui);
     }
     start(){
         // temporary debug scene
@@ -53,7 +58,7 @@ export class Game{
         }
         // clear and draw scene
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = '#222425';
+        this.ctx.fillStyle = '#302c2e';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.scene.draw(this.ctx);
 

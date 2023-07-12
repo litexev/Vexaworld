@@ -1,3 +1,4 @@
+import { mod } from './utils.js'
 export class Transform {
     constructor(opt, scene) {
         // Position in the scene, in pixel coordinates
@@ -44,14 +45,22 @@ export class Transform {
 
         // Whether to render the object
         this.hidden = false;
+
+        // The rotation of the object
+        this.rotation = 0;
     }
     draw(ctx){
         // stub
     }
     update(deltaTime){
         if(this.accurateHitbox){
-            this.hitboxWidth = this.width;
-            this.hitboxHeight = this.height;
+            if(!(this.rotation == 1 || this.rotation == 3)){
+                this.hitboxWidth = this.width;
+                this.hitboxHeight = this.height;
+            }else{
+                this.hitboxWidth = this.height;
+                this.hitboxHeight = this.width;
+            }
         }
         if(this.debugPos) console.log(this.x, this.y)
     }
@@ -59,19 +68,31 @@ export class Transform {
         // debug feature: log block to console
         console.log(this);
     }
+
+    // @TODO: rotated hitbox on wide blocks
     intersects(other){
         if(this.ignoreIntersects) return false;
 
+        let meLeft = this.x
+        let meRight = this.x + this.hitboxWidth
+        let otherLeft = other.x
+        let otherRight = other.x + other.hitboxWidth
+
+        let meTop = this.y
+        let meBottom = this.y + this.hitboxHeight
+        let otherTop = other.y
+        let otherBottom = other.y + other.hitboxHeight
+        
         return (
-            this.x <= other.x + other.hitboxWidth &&
-            this.x + this.hitboxWidth >= other.x &&
-            this.y <= other.y + other.hitboxHeight &&
-            this.y + this.hitboxHeight >= other.y
+            meLeft <= otherRight  &&
+            meRight >= otherLeft &&
+            meTop <= otherBottom &&
+            meBottom >= otherTop
         );
     }
     inside(other){
         if(this.ignoreIntersects) return false;
-        
+
         return (
             (this.x+1) <= other.x + other.hitboxWidth &&
             (this.x+1) + (this.hitboxWidth-2) >= other.x &&
@@ -82,11 +103,21 @@ export class Transform {
     willIntersect(x, y, width, height){
         if(this.ignoreIntersects) return false;
 
+        let meLeft = this.x
+        let meRight = this.x + this.hitboxWidth
+        let otherLeft = x
+        let otherRight = x + width
+
+        let meTop = this.y
+        let meBottom = this.y + this.hitboxHeight
+        let otherTop = y
+        let otherBottom = y + height
+        
         return (
-            this.x <= x + width &&
-            this.x + this.hitboxWidth >= x &&
-            this.y <= y + height &&
-            this.y + this.hitboxHeight >= y
+            meLeft <= otherRight  &&
+            meRight >= otherLeft &&
+            meTop <= otherBottom &&
+            meBottom >= otherTop
         );
     }
     willBeInside(x, y, width, height){
@@ -114,5 +145,7 @@ export class Transform {
             other.y + otherHeight <= this.y + this.hitboxHeight / 2
         );
     }*/
-    
+    rotate(amount){
+        this.rotation = mod(this.rotation + amount, 4);
+    }
 }

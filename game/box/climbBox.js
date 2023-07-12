@@ -5,7 +5,7 @@ import { KeyHandler } from '../keyHandler.js';
 export class ClimbBox extends ImageBox {
     constructor(opt, scene) {
         super(opt, scene);
-        this.image.src = opt.image || "img/vine.png";
+        this.image.src = opt.image || "img/ladder.png";
         this.solid = false;
 
         // important

@@ -12,24 +12,7 @@ export class PushBox extends ImageBox {
         this.rotation = 0;
         this.accurateHitbox = false;
         this.hitboxWidth, this.hitboxHeight = 48/2, 48/2;
-    }
-    altclick(){
-        super.altclick();
-        this.rotation = (this.rotation + 1) % 4;
-        switch(this.rotation){
-            case 0:
-                this.setImage("img/right.png");
-                break;
-            case 1:
-                this.setImage("img/down.png");
-                break;
-            case 2:
-                this.setImage("img/left.png");
-                break;
-            case 3:
-                this.setImage("img/up.png");
-                break;
-        }
+        this.isLadder = true;
     }
     update(deltaTime){
         super.update(deltaTime);
