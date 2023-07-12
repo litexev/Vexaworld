@@ -60,16 +60,9 @@ export class ObjectPlacer extends ImageBox{
 
         this.scene.game.canvas.addEventListener('mousedown', (e) => {
             if(e.button === 0){
-                // Left click to place etc
                 this.mouseDown = true;
                 this.affectBlock(true);
-            }else if(e.button === 2){
-                // Rotate placement on right click
-                console.log("right click!")
-                this.rotation = (this.rotation + 1) % 4
-                e.preventDefault();
             }
-            
         });
         
         // temporary cycler
@@ -98,6 +91,11 @@ export class ObjectPlacer extends ImageBox{
             if(e.code == "KeyR"){
                 if (e.repeat) { return }
                 this.rotation = (this.rotation + 1) % 4
+                this.rotateSound.play();
+            }
+            if(e.code == "KeyT"){
+                if (e.repeat) { return }
+                this.rotation = 0;
                 this.rotateSound.play();
             }
         });
