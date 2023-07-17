@@ -12,7 +12,6 @@ export class PushBox extends ImageBox {
         this.rotation = 0;
         this.accurateHitbox = false;
         this.hitboxWidth, this.hitboxHeight = 48/2, 48/2;
-        this.isLadder = true;
         this.type = "pusher";
     }
     update(deltaTime){

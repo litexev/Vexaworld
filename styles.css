@@ -53,3 +53,11 @@ canvas{
     color: gray;
     font-size: 12px;
 }
+.taskBarBtn:hover{
+    background-color:rgba(0, 0, 0, 0.26)
+}
+
+.taskBar{
+    background-color: #4a5462 !important;
+    box-shadow: inset 0px 4px 0px #6d758d, inset 0px -4px 0px #333941;
+}

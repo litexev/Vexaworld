@@ -39,8 +39,8 @@ export class Game{
             e.preventDefault();
         }, false);
         
-        this.pixelDrawer = new PixelDrawer(this.ui);
-        this.pixelDrawer.show();
+        // this.pixelDrawer = new PixelDrawer(this.ui);
+        // this.pixelDrawer.show();
         this.hud = new Hud(this.ui);
         this.hud.createUI(this.ui);
 

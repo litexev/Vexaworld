@@ -26,7 +26,7 @@ export class PixelDrawer extends Window{
         this.setupEventListeners();
     }
     createUI(uiElem){
-        super.createUI(uiElem, "Pixel Drawer", "img/test.png", 450, 670);
+        super.createUI(uiElem, "Pixel Drawer", "img/icon/16/painter.png", 450, 670);
         this.topLayout = this.liet.new({type: "div", class: "h-box gap-2 topLayout", parent: this.windowContent});
 
         this.typeLabel = this.liet.new({type: "span", class: "typeLabel", value: "Block Type:", parent: this.topLayout});
